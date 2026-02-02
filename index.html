@@ -20,52 +20,55 @@
 
   <audio id="player"></audio>
 
-  <script>
-    console.log("JS LOADED");
-    const songs = [
-      "Enkidu - Falling.mp3",
-      "MTNS - Fears.mp3",
-      "Sea Oleena - Milk (Official Video).mp3",
-      "The Glitch Mob - Becoming Harmonious.mp3"
-    ];
+<script>
+const songs = [
+  "Enkidu - Falling.mp3",
+  "MTNS - Fears.mp3",
+  "Sea Oleena - Milk (Official Video).mp3",
+  "The Glitch Mob - Becoming Harmonious.mp3"
+];
 
-    function shuffle(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-    }
+// shuffle
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
 
+shuffle(songs);
+
+const player = document.getElementById("player");
+let index = 0;
+let started = false;
+
+function playCurrent() {
+  player.src = songs[index];
+  player.play().catch(err => {
+    console.log("Play blocked:", err);
+  });
+}
+
+// next song
+player.addEventListener("ended", () => {
+  index++;
+  if (index >= songs.length) {
     shuffle(songs);
+    index = 0;
+  }
+  playCurrent();
+});
 
-    const player = document.getElementById("player");
-    let index = 0;
-
-    function playCurrent() {
-      player.src = songs[index];
-      player.play().catch(() => {});
-    }
-
-    player.addEventListener("ended", () => {
-      index++;
-      if (index >= songs.length) {
-        shuffle(songs);
-        index = 0;
-      }
-      playCurrent();
-    });
-
-    // Tumblr-safe autoplay
-    player.muted = true;
+// REQUIRED: user gesture
+document.addEventListener("click", () => {
+  if (!started) {
+    started = true;
+    player.muted = false;
     playCurrent();
+  }
+});
+</script>
 
-    document.addEventListener("click", () => {
-      if (player.muted) {
-        player.muted = false;
-        playCurrent();
-      }
-    }, { once: true });
-  </script>
 
 </body>
 </html>
