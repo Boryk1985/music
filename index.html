@@ -1,26 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Music</title>
-
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: transparent;
-    }
-    audio {
-      display: none;
-    }
-  </style>
-</head>
-
-<body>
-
-  <audio id="player"></audio>
-
 <script>
+const player = document.getElementById("player");
+
 const songs = [
   "Bassnectar - Butterfly (ft. Mimi Page) [OFFICIAL].mp3",
   "Enkidu - Falling.mp3",
@@ -29,7 +9,6 @@ const songs = [
   "The Glitch Mob - Becoming Harmonious.mp3"
 ];
 
-// shuffle
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -39,7 +18,6 @@ function shuffle(arr) {
 
 shuffle(songs);
 
-const player = document.getElementById("player");
 let index = 0;
 let started = false;
 
@@ -50,17 +28,19 @@ function playCurrent() {
   });
 }
 
-// next song
+// 🔁 LOOP PLAYLIST (THIS is what you were missing)
 player.addEventListener("ended", () => {
   index++;
+
   if (index >= songs.length) {
-    shuffle(songs);
     index = 0;
+    shuffle(songs); // reshuffle each full cycle
   }
+
   playCurrent();
 });
 
-// REQUIRED: user gesture
+// Tumblr-required user gesture
 document.addEventListener("click", () => {
   if (!started) {
     started = true;
@@ -69,9 +49,5 @@ document.addEventListener("click", () => {
   }
 });
 </script>
-
-
-</body>
-</html>
 
 
